@@ -19,5 +19,8 @@ public class User {
     private Timestamp createdAt;
     private boolean isActive;
 
+    public enum Role {
+        EMPLOYEE, ADMIN
+    }
 
 }

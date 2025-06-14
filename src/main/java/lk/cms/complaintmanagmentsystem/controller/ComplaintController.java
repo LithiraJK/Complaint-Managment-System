@@ -20,6 +20,30 @@ import java.util.UUID;
 @WebServlet("/complaint")
 public class ComplaintController extends HttpServlet {
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession(false);
+        User user = (User) session.getAttribute("user");
+
+        if (user == null || !"EMPLOYEE".equals(user.getRole())) {
+            resp.sendRedirect("pages/signin.jsp");
+            return;
+        }
+
+        try {
+            ServletContext context = req.getServletContext();
+            BasicDataSource ds = (BasicDataSource) context.getAttribute("ds");
+
+            ComplaintDAO complaintDAO = new ComplaintDAO(ds);
+            req.setAttribute("complaints", complaintDAO.getComplaintsBySubmittedUser(user.getUserId()));
+            req.getRequestDispatcher("pages/employee-dashboard.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            req.setAttribute("error", "Error fetching complaints: " + e.getMessage());
+            req.getRequestDispatcher("pages/employee-dashboard.jsp").forward(req, resp);
+        }
+    }
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         HttpSession session = request.getSession(false);
@@ -57,6 +81,7 @@ public class ComplaintController extends HttpServlet {
                 request.setAttribute("error", "Failed to submit complaint. Please try again.");
             }
 
+            request.setAttribute("complaints", complaintDAO.getComplaintsBySubmittedUser(user.getUserId()));
             request.getRequestDispatcher("pages/employee-dashboard.jsp").forward(request, response);
 
 

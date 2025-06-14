@@ -5,7 +5,10 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComplaintDAO {
 
@@ -39,6 +42,34 @@ public class ComplaintDAO {
         return executed > 0 ;
 
     }
+
+    public List<Complaint> getComplaintsBySubmittedUser(String userId) throws SQLException {
+        String sql = "SELECT * FROM complaints WHERE submitted_by = ? ORDER BY created_at DESC";
+        List<Complaint> list = new ArrayList<>();
+
+        try (Connection con = dataSource.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Complaint complaint = new Complaint(
+                        rs.getString("complaint_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getString("priority"),
+                        rs.getString("status"),
+                        rs.getString("submitted_by"),
+                        rs.getString("assigned_to"),
+                        rs.getString("admin_remarks"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("updated_at")
+                );
+                list.add(complaint);
+            }
+        }
+        return list;
+    }
+
 
 
 }

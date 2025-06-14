@@ -1,18 +1,50 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Lithira Jayanaka
-  Date: 6/14/2025
-  Time: 5:42 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Employee-Dashboard</title>
-</head>
-<body>
-<h1>Employee-Dashboard</h1>
-<a href="submit-complaint.jsp"> Add Complaint</a>
+<%@ page import="java.util.List" %>
+<%@ page import="lk.cms.complaintmanagmentsystem.model.Complaint" %>
+<%@ page import="lk.cms.complaintmanagmentsystem.model.User" %>
+<%
+    HttpSession httpSession = request.getSession(false);
+    User user = (User) httpSession.getAttribute("user");
 
-</body>
-</html>
+    if (user == null || !"EMPLOYEE".equals(user.getRole())) {
+        response.sendRedirect("signin.jsp");
+        return;
+    }
+
+    List<Complaint> complaints = (List<Complaint>) request.getAttribute("complaints");
+%>
+
+<h2>Your Complaints</h2>
+
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Created At</th>
+    </tr>
+    <%
+        if (complaints != null && !complaints.isEmpty()) {
+            for (Complaint c : complaints) {
+    %>
+    <tr>
+        <td><%= c.getComplaintId() %></td>
+        <td><%= c.getTitle() %></td>
+        <td><%= c.getCategory() %></td>
+        <td><%= c.getPriority() %></td>
+        <td><%= c.getStatus() %></td>
+        <td><%= c.getCreatedAt() %></td>
+    </tr>
+    <%
+        }
+    } else {
+    %>
+    <tr><td colspan="6">No complaints found.</td></tr>
+    <%
+        }
+    %>
+</table>
+<p>
+    <a href="submit-complaint.jsp">Submit a New Complaint</a>
+</p>

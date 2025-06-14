@@ -12,6 +12,7 @@
 </head>
 <body>
 <h1>Employee-Dashboard</h1>
+<a href="submit-complaint.jsp"> Add Complaint</a>
 
 </body>
 </html>

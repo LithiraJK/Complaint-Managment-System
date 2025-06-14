@@ -13,5 +13,15 @@
 <body>
 <h1>Admin-DashBoard</h1>
 
+<h3> Complaints Table</h3>
+<table id="complaints">
+    <thead>
+        <tr>
+            <th>Complaint</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+</table>
+
 </body>
 </html>

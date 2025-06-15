@@ -36,7 +36,7 @@ public class ComplaintController extends HttpServlet {
 
             ComplaintDAO complaintDAO = new ComplaintDAO(ds);
             req.setAttribute("complaints", complaintDAO.getComplaintsBySubmittedUser(user.getUserId()));
-            req.getRequestDispatcher("complaint").forward(req, resp);
+            req.getRequestDispatcher("pages/employee-dashboard.jsp").forward(req, resp);
         } catch (SQLException e) {
             e.printStackTrace();
             req.setAttribute("error", "Error fetching complaints: " + e.getMessage());
@@ -69,7 +69,6 @@ public class ComplaintController extends HttpServlet {
                     request.getParameter("priority"),
                     "PENDING", // default
                     user.getUserId(),
-                    null, // assigned_to is null
                     null, // admin_remarks
                     new Timestamp(System.currentTimeMillis()),
                     new Timestamp(System.currentTimeMillis())

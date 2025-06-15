@@ -17,7 +17,6 @@ public class Complaint {
     private String priority;
     private String status;
     private String submittedBy;
-    private String assignedTo;
     private String adminRemarks; //Admin Message
     private Timestamp createdAt;
     private Timestamp updatedAt;

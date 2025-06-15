@@ -42,6 +42,6 @@
     <%= request.getAttribute("msg") != null ? request.getAttribute("msg") : "" %>
 </p>
 
-<p><a href="employee-dashboard.jsp">Back to Dashboard</a></p>
+<a href="${pageContext.request.contextPath}/complaint">Back to Dashboard</a>
 </body>
 </html>

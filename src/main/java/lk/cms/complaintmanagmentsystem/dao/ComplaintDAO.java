@@ -21,8 +21,8 @@ public class ComplaintDAO {
     public boolean addComplaint(Complaint complaint) throws SQLException {
         String sql = "INSERT INTO complaints (" +
                 "complaint_id, title, description, category, priority, status, " +
-                "submitted_by, assigned_to, admin_remarks, created_at, updated_at" +
-                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "submitted_by, admin_remarks, created_at, updated_at" +
+                ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection connection = dataSource.getConnection();
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -33,10 +33,9 @@ public class ComplaintDAO {
         ps.setString(5, complaint.getPriority());
         ps.setString(6, complaint.getStatus());
         ps.setString(7, complaint.getSubmittedBy());
-        ps.setString(8, complaint.getAssignedTo());
-        ps.setString(9, complaint.getAdminRemarks());
-        ps.setTimestamp(10, complaint.getCreatedAt());
-        ps.setTimestamp(11, complaint.getUpdatedAt());
+        ps.setString(8, complaint.getAdminRemarks());
+        ps.setTimestamp(9, complaint.getCreatedAt());
+        ps.setTimestamp(10, complaint.getUpdatedAt());
 
         int executed = ps.executeUpdate();
         return executed > 0 ;
@@ -59,7 +58,6 @@ public class ComplaintDAO {
                         rs.getString("priority"),
                         rs.getString("status"),
                         rs.getString("submitted_by"),
-                        rs.getString("assigned_to"),
                         rs.getString("admin_remarks"),
                         rs.getTimestamp("created_at"),
                         rs.getTimestamp("updated_at")
@@ -101,7 +99,6 @@ public class ComplaintDAO {
                         rs.getString("priority"),
                         rs.getString("status"),
                         rs.getString("submitted_by"),
-                        rs.getString("assigned_to"),
                         rs.getString("admin_remarks"),
                         rs.getTimestamp("created_at"),
                         rs.getTimestamp("updated_at")
@@ -120,6 +117,47 @@ public class ComplaintDAO {
         } catch (SQLException e) {
             e.printStackTrace();
                 return false;
+        }
+    }
+
+    public List<Complaint> getAllComplaints() throws SQLException {
+        String sql = "SELECT * FROM complaints ORDER BY created_at DESC";
+        List<Complaint> list = new ArrayList<>();
+
+        try (Connection con = dataSource.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Complaint c = new Complaint(
+                        rs.getString("complaint_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getString("priority"),
+                        rs.getString("status"),
+                        rs.getString("submitted_by"),
+                        rs.getString("admin_remarks"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("updated_at")
+                );
+                list.add(c);
+            }
+        }
+
+        return list;
+    }
+
+    public boolean updateComplaintByAdmin(String complaintId, String status, String adminRemark) {
+        String sql = "UPDATE complaints SET status = ?, admin_remarks = ?, updated_at = CURRENT_TIMESTAMP WHERE complaint_id = ?";
+
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, status);
+                ps.setString(2, adminRemark);
+                ps.setString(3, complaintId);
+                return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

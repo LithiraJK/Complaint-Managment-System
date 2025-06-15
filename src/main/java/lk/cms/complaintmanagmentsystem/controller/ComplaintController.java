@@ -36,10 +36,11 @@ public class ComplaintController extends HttpServlet {
 
             ComplaintDAO complaintDAO = new ComplaintDAO(ds);
             req.setAttribute("complaints", complaintDAO.getComplaintsBySubmittedUser(user.getUserId()));
-            req.getRequestDispatcher("pages/employee-dashboard.jsp").forward(req, resp);
+            req.getRequestDispatcher("complaint").forward(req, resp);
         } catch (SQLException e) {
             e.printStackTrace();
             req.setAttribute("error", "Error fetching complaints: " + e.getMessage());
+
             req.getRequestDispatcher("pages/employee-dashboard.jsp").forward(req, resp);
         }
     }

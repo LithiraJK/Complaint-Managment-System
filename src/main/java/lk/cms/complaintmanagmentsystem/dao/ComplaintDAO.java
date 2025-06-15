@@ -69,7 +69,46 @@ public class ComplaintDAO {
         }
         return list;
     }
+    
 
+    public boolean updateComplaintByEmployee(Complaint complaint) throws SQLException {
+        String sql = "UPDATE complaints SET title=?, description=?, category=?, priority=?, updated_at=? WHERE complaint_id=?";
 
+        try (
+                Connection con = dataSource.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setString(1, complaint.getTitle());
+                    ps.setString(2, complaint.getDescription());
+                    ps.setString(3, complaint.getCategory());
+                    ps.setString(4, complaint.getPriority());
+                    ps.setTimestamp(5, complaint.getUpdatedAt());
+                    ps.setString(6, complaint.getComplaintId());
+                    return ps.executeUpdate() > 0;
+        }
+    }
+
+    public Complaint getComplaintById(String id) throws SQLException {
+        String sql = "SELECT * FROM complaints WHERE complaint_id = ?";
+        try (Connection con = dataSource.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Complaint(
+                        rs.getString("complaint_id"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getString("priority"),
+                        rs.getString("status"),
+                        rs.getString("submitted_by"),
+                        rs.getString("assigned_to"),
+                        rs.getString("admin_remarks"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("updated_at")
+                );
+            }
+        }
+        return null;
+    }
 
 }

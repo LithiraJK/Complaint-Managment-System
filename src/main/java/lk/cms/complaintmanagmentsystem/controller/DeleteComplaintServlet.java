@@ -22,7 +22,7 @@ public class DeleteComplaintServlet extends HttpServlet {
         }
 
         String id = req.getParameter("complaintId");
-        BasicDataSource ds = (BasicDataSource) getServletContext().getAttribute("ds");
+        BasicDataSource ds = (BasicDataSource) req.getServletContext().getAttribute("ds");
         ComplaintDAO dao = new ComplaintDAO(ds);
 
         try {
@@ -45,9 +45,9 @@ public class DeleteComplaintServlet extends HttpServlet {
                 }
             }
 
-            boolean deleted = dao.deleteComplaintById(id);
+            boolean isDeleted = dao.deleteComplaintById(id);
 
-            if (deleted) {
+            if (isDeleted) {
                 if ("ADMIN".equals(user.getRole())) {
                     resp.sendRedirect("admin-dashboard");
                 } else {

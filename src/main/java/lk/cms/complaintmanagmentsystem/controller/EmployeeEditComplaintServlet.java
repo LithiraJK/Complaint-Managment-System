@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 
 @WebServlet("/edit-complaint")
-public class EditComplaintServlet extends HttpServlet {
+public class EmployeeEditComplaintServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("complaintId");
@@ -59,7 +59,7 @@ public class EditComplaintServlet extends HttpServlet {
         String id = req.getParameter("complaintId");
 
         try {
-            BasicDataSource ds = (BasicDataSource) getServletContext().getAttribute("ds");
+            BasicDataSource ds = (BasicDataSource) req.getServletContext().getAttribute("ds");
             ComplaintDAO dao = new ComplaintDAO(ds);
 
             Complaint complaint = dao.getComplaintById(id);
@@ -83,7 +83,7 @@ public class EditComplaintServlet extends HttpServlet {
 
             req.setAttribute("msg", updated ? "Complaint updated successfully." : "Failed to update complaint.");
             req.setAttribute("complaint", complaint);
-            req.getRequestDispatcher("pages/edit-complaint.jsp").forward(req, resp);
+            req.getRequestDispatcher("pages/employee-dashboard.jsp").forward(req, resp);
 
         } catch (Exception e) {
             throw new ServletException(e);

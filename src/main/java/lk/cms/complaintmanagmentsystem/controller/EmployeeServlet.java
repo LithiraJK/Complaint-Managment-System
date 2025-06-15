@@ -17,8 +17,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@WebServlet("/complaint")
-public class ComplaintController extends HttpServlet {
+@WebServlet("/employee-dashboard")
+public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

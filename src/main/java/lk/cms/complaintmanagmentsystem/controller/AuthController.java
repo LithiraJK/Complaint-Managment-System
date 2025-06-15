@@ -51,7 +51,7 @@ public class AuthController  extends HttpServlet {
 
                 if (user != null) {
                     req.getSession().setAttribute("user", user);
-                    resp.sendRedirect("pages/" + (user.getRole().equals("ADMIN") ? "admin-dashboard.jsp" : "employee-dashboard.jsp"));
+                    resp.sendRedirect( (user.getRole().equals("ADMIN") ? "admin-dashboard" : "employee-dashboard"));
                 } else {
                     req.setAttribute("error", "Invalid credentials or inactive account.");
                     req.getRequestDispatcher("pages/signin.jsp").forward(req, resp);

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/admin-dashboard")
-public class AdminDashBoardServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = (User) req.getSession().getAttribute("user");
         if (user == null || !"ADMIN".equals(user.getRole())) {

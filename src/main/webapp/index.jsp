@@ -5,9 +5,6 @@
     <title>CMS</title>
 </head>
 <body>
-<h1><%= "Hello World!" %>
-</h1>
-<br/>
-<a href="pages/signin.jsp">Hello JSP</a>
+<% response.sendRedirect("pages/signin.jsp"); %>
 </body>
 </html>

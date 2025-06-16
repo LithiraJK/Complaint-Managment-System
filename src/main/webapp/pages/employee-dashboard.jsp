@@ -65,6 +65,7 @@
                 <a href="pages/submit-complaint.jsp" class="btn btn-success">+ New Complaint</a>
             </div>
 
+
             <div class="card-box">
                 <h5 class="mb-3">Complaint History</h5>
                 <div class="table-responsive">
@@ -123,6 +124,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div>
+                <a href="pages/logout.jsp" class="btn btn-danger" type="button">Logout</a>
             </div>
         </div>
     </div>

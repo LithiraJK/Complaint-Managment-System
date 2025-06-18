@@ -12,125 +12,341 @@
     }
 
     List<Complaint> complaints = (List<Complaint>) request.getAttribute("complaints");
+
+    int totalComplaints = complaints != null ? complaints.size() : 0;
+    int pendingCount = 0;
+    int inProgressCount = 0;
+    int resolvedCount = 0;
+
+    if (complaints != null) {
+        for (Complaint c : complaints) {
+            String status = c.getStatus().toUpperCase();
+            switch (status) {
+                case "PENDING":
+                    pendingCount++;
+                    break;
+                case "IN_PROGRESS":
+                    inProgressCount++;
+                    break;
+                case "RESOLVED":
+                    resolvedCount++;
+                    break;
+            }
+        }
+    }
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Employee Dashboard</title>
+    <title>Employee Dashboard - Municipal CMS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            background: linear-gradient(45deg, #1870f3, #022b51);
-            color: white;
-            min-height: 100vh;
-        }
-        .sidebar .profile {
-            text-align: center;
-            margin: 30px 0;
-        }
-        .sidebar .profile img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid white;
-        }
-        .card-box {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/employee-dashboard.css" rel="stylesheet">
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2 sidebar d-flex flex-column align-items-center">
-            <h3>CMS</h3>
-            <div class="profile">
-                <h5 class="mt-2"><%= user.getFullName() %></h5>
-                <p>[Employee]</p>
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-building"></i> Municipal CMS
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <div class="user-avatar">
+                            <%= user.getFullName().substring(0,1).toUpperCase() %>
+                        </div>
+                        <%= user.getFullName() %>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="pages/logout.jsp"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid p-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                <div class="mb-3 mb-md-0">
+                    <h2 class="fw-bold">Welcome, <%= user.getFullName() %>!</h2>
+                    <p class="text-muted">Manage your complaints</p>
+                </div>
+                <button class="btn btn-success btn-modern" data-bs-toggle="modal" data-bs-target="#newComplaintModal">
+                    <i class="bi bi-plus-circle"></i> New Complaint
+                </button>
             </div>
         </div>
+    </div>
 
-        <div class="col-md-10 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold">Your Complaints</h2>
-                <a href="pages/submit-complaint.jsp" class="btn btn-success">+ New Complaint</a>
+    <div class="row mb-4">
+        <div class="col-6 col-md-3">
+            <div class="stats-card">
+                <div class="stats-number text-primary"><%= totalComplaints %></div>
+                <div class="stats-label">Total</div>
             </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stats-card">
+                <div class="stats-number text-warning"><%= pendingCount %></div>
+                <div class="stats-label">Pending</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stats-card">
+                <div class="stats-number text-info"><%= inProgressCount %></div>
+                <div class="stats-label">In Progress</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="stats-card">
+                <div class="stats-number text-success"><%= resolvedCount %></div>
+                <div class="stats-label">Resolved</div>
+            </div>
+        </div>
+    </div>
 
+    <div class="main-card">
+        <div class="card-header-custom">
+            <h5 class="mb-0"><i class="bi bi-list-ul"></i> Your Complaints</h5>
+        </div>
 
-            <div class="card-box">
-                <h5 class="mb-3">Complaint History</h5>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-primary">
-                        <tr>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Priority</th>
-                            <th>Status</th>
-                            <th>Description</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <%
-                            if (complaints != null && !complaints.isEmpty()) {
-                                for (Complaint c : complaints) {
-                                    boolean disabled = c.getStatus().equalsIgnoreCase("RESOLVED") || c.getStatus().equalsIgnoreCase("CLOSED");
-                        %>
-                        <tr>
-                            <td><%= c.getTitle() %></td>
-                            <td><%= c.getCategory() %></td>
-                            <td>
-                                <span class="badge bg-<%= c.getPriority().equalsIgnoreCase("HIGH") ? "danger" : c.getPriority().equalsIgnoreCase("MEDIUM") ? "warning text-dark" : "secondary" %>">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-modern table-hover mb-0">
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th class="d-none d-md-table-cell">Category</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th class="d-none d-lg-table-cell">Description</th>
+                        <th class="d-none d-md-table-cell">Created</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        if (complaints != null && !complaints.isEmpty()) {
+                            for (Complaint c : complaints) {
+                                boolean disabled = c.getStatus().equalsIgnoreCase("RESOLVED") || c.getStatus().equalsIgnoreCase("CLOSED");
+                    %>
+                    <tr>
+                        <td>
+                            <strong><%= c.getTitle() %></strong>
+                            <div class="d-md-none">
+                                <small class="text-muted"><%= c.getCategory() %></small>
+                            </div>
+                        </td>
+                        <td class="d-none d-md-table-cell"><%= c.getCategory() %></td>
+                        <td>
+                                <span class="badge bg-<%= c.getPriority().equalsIgnoreCase("HIGH") ? "danger" : c.getPriority().equalsIgnoreCase("MEDIUM") ? "warning text-dark" : c.getPriority().equalsIgnoreCase("URGENT") ? "dark" : "secondary" %>">
                                     <%= c.getPriority() %>
                                 </span>
-                            </td>
-                            <td><%= c.getStatus() %></td>
-                            <td><%= c.getDescription() %></td>
-                            <td><%= c.getCreatedAt() %></td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <form action="edit-complaint" method="get">
-                                        <input type="hidden" name="complaintId" value="<%= c.getComplaintId() %>">
-                                        <button type="submit" class="btn btn-sm btn-primary" <%= disabled ? "disabled" : "" %>>Edit</button>
-                                    </form>
-                                    <form action="delete-complaint" method="post" onsubmit="return confirm('Are you sure you want to delete this complaint?');">
-                                        <input type="hidden" name="complaintId" value="<%= c.getComplaintId() %>">
-                                        <button type="submit" class="btn btn-sm btn-danger" <%= disabled ? "disabled" : "" %>>Delete</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        <%
-                            }
-                        } else {
-                        %>
-                        <tr>
-                            <td colspan="7" class="text-center text-muted">No complaints found.</td>
-                        </tr>
-                        <%
-                            }
-                        %>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div>
-                <a href="pages/logout.jsp" class="btn btn-danger" type="button">Logout</a>
+                        </td>
+                        <td>
+                                <span class="badge bg-<%= c.getStatus().equalsIgnoreCase("RESOLVED") ? "success" : c.getStatus().equalsIgnoreCase("IN_PROGRESS") ? "info" : c.getStatus().equalsIgnoreCase("CLOSED") ? "secondary" : "warning" %>">
+                                    <%= c.getStatus() %>
+                                </span>
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            <%= c.getDescription().length() > 50 ? c.getDescription().substring(0, 50) + "..." : c.getDescription() %>
+                        </td>
+                        <td class="d-none d-md-table-cell"><%= c.getCreatedAt() %></td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <button class="btn btn-sm btn-primary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editModal"
+                                        data-complaint-id="<%= c.getComplaintId() %>"
+                                        data-complaint-title="<%= c.getTitle() %>"
+                                        data-complaint-description="<%= c.getDescription() %>"
+                                        data-complaint-category="<%= c.getCategory() %>"
+                                        data-complaint-priority="<%= c.getPriority() %>"
+                                        <%= disabled ? "disabled" : "" %>>
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteModal"
+                                        data-complaint-id="<%= c.getComplaintId() %>"
+                                        data-complaint-title="<%= c.getTitle() %>"
+                                        <%= disabled ? "disabled" : "" %>>
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    } else {
+                    %>
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            <i class="bi bi-inbox display-4 text-muted"></i>
+                            <p class="text-muted mt-2">No complaints found.</p>
+                            <button class="btn btn-success btn-modern" data-bs-toggle="modal" data-bs-target="#newComplaintModal">
+                                <i class="bi bi-plus-circle"></i> Submit Your First Complaint
+                            </button>
+                        </td>
+                    </tr>
+                    <%
+                        }
+                    %>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="newComplaintModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Submit New Complaint</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="${pageContext.request.contextPath}/employee-dashboard">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Title *</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description *</label>
+                        <textarea name="description" rows="4" class="form-control" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category *</label>
+                            <select name="category" class="form-select" required>
+                                <option value="">Select Category</option>
+                                <option value="Infrastructure">Infrastructure</option>
+                                <option value="Roads">Roads</option>
+                                <option value="Water">Water</option>
+                                <option value="Electricity">Electricity</option>
+                                <option value="Waste Management">Waste Management</option>
+                                <option value="Noise">Noise</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Priority *</label>
+                            <select name="priority" class="form-select" required>
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM" selected>Medium</option>
+                                <option value="HIGH">High</option>
+                                <option value="URGENT">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Submit Complaint</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Edit Complaint</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="${pageContext.request.contextPath}/employee-dashboard">
+                <div class="modal-body">
+                    <input type="hidden" name="complaintId" id="editComplaintId">
+                    <div class="mb-3">
+                        <label class="form-label">Title *</label>
+                        <input type="text" name="title" class="form-control" id="editTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description *</label>
+                        <textarea name="description" rows="4" class="form-control" id="editDescription" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category *</label>
+                            <select name="category" class="form-select" id="editCategory" required>
+                                <option value="Infrastructure">Infrastructure</option>
+                                <option value="Roads">Roads</option>
+                                <option value="Water">Water</option>
+                                <option value="Electricity">Electricity</option>
+                                <option value="Waste Management">Waste Management</option>
+                                <option value="Noise">Noise</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Priority *</label>
+                            <select name="priority" class="form-select" id="editPriority" required>
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HIGH">High</option>
+                                <option value="URGENT">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Complaint</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-exclamation-triangle"></i> Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this complaint?</p>
+                <p><strong>Title:</strong> <span id="deleteComplaintTitle"></span></p>
+                <div class="alert alert-warning">
+                    <strong>Warning:</strong> This action cannot be undone.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="delete-complaint" method="post" style="display: inline;">
+                    <input type="hidden" name="complaintId" id="deleteComplaintId">
+                    <button type="submit" class="btn btn-danger">Delete Complaint</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/employee-dashboard.js"></script>
 </body>
 </html>

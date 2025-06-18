@@ -40,14 +40,18 @@
         }
 
         .btn-custom {
-            background-color: #0d6efd;
+            background: linear-gradient(30deg, #0b5ed7,#003465);
             border: none;
             color: #f8f9fa ;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
         }
 
         .btn-custom:hover {
-            background-color: #0b5ed7;
+            background: linear-gradient(30deg, #003465,#0b5ed7);
             color: #f8f9fa;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
         }
 
         a {

@@ -25,7 +25,7 @@
             background-color: #f8f9fa;
         }
         .sidebar {
-            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            background: linear-gradient(45deg, #1870f3, #022b51);
             color: white;
             min-height: 100vh;
         }
@@ -72,11 +72,11 @@
                     <table class="table table-hover align-middle">
                         <thead class="table-primary">
                         <tr>
-                            <th>ID</th>
                             <th>Title</th>
                             <th>Category</th>
                             <th>Priority</th>
                             <th>Status</th>
+                            <th>Description</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
@@ -88,7 +88,6 @@
                                     boolean disabled = c.getStatus().equalsIgnoreCase("RESOLVED") || c.getStatus().equalsIgnoreCase("CLOSED");
                         %>
                         <tr>
-                            <td><%= c.getComplaintId() %></td>
                             <td><%= c.getTitle() %></td>
                             <td><%= c.getCategory() %></td>
                             <td>
@@ -97,6 +96,7 @@
                                 </span>
                             </td>
                             <td><%= c.getStatus() %></td>
+                            <td><%= c.getDescription() %></td>
                             <td><%= c.getCreatedAt() %></td>
                             <td>
                                 <div class="d-flex gap-2">

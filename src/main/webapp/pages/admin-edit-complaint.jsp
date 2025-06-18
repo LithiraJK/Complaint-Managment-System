@@ -23,7 +23,7 @@
             background-color: #f8f9fa;
         }
         .sidebar {
-            background: linear-gradient(45deg, #2575fc,#6a11cb);
+            background: linear-gradient(45deg, #1870f3, #022b51);
             color: white;
             min-height: 100vh;
         }

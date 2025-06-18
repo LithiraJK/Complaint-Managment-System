@@ -28,7 +28,7 @@
             background-color: #f8f9fa;
         }
         .sidebar {
-            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            background: linear-gradient(45deg, #1870f3, #022b51);
             color: white;
             min-height: 100vh;
         }
@@ -94,6 +94,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update Complaint</button>
+                    <a href="employee-dashboard" type="button" class="btn btn-secondary"> Cancel</a>
                 </form>
 
                 <p class="text-success mt-3">

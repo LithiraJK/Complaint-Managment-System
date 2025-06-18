@@ -52,33 +52,17 @@
         <a class="navbar-brand" href="#">
             <i class="bi bi-building"></i> Municipal CMS
         </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#"><i class="bi bi-speedometer2"></i> Dashboard</a>
-                </li>
-            </ul>
-
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                        <div class="user-avatar">
-                            <%= user.getFullName().substring(0,1).toUpperCase() %>
-                        </div>
-                        <%= user.getFullName() %>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="pages/logout.jsp"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="navbar-nav ms-auto">
+            <div class="nav-item d-flex align-items-center">
+                <div class="user-avatar">
+                    <%= user.getFullName().substring(0, 1).toUpperCase() %>
+                </div>
+                <span class="nav-link"><%= user.getFullName() %></span>
+                <a href="pages/logout.jsp" class="nav-link"
+                   onclick="return confirm('Are you sure you want to log out?')">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
         </div>
     </div>
 </nav>
@@ -277,32 +261,37 @@
                 <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Edit Complaint</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="${pageContext.request.contextPath}/employee-dashboard">
+            <form method="post" action="${pageContext.request.contextPath}/edit-complaint">
                 <div class="modal-body">
                     <input type="hidden" name="complaintId" id="editComplaintId">
-                    <div class="mb-3">
-                        <label class="form-label">Title *</label>
-                        <input type="text" name="title" class="form-control" id="editTitle" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Description *</label>
-                        <textarea name="description" rows="4" class="form-control" id="editDescription" required></textarea>
+                    <div class="complaint-info">
+                        <h6><i class="bi bi-info-circle"></i> Complaint Information</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="editTitle" class="form-label">Title *</label>
+                                <input type="text" class="form-control" id="editTitle" name="title" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="editCategory" class="form-label">Category *</label>
+                                <select name="category" class="form-select" id="editCategory" required>
+                                    <option value="Infrastructure">Infrastructure</option>
+                                    <option value="Roads">Roads</option>
+                                    <option value="Water">Water</option>
+                                    <option value="Electricity">Electricity</option>
+                                    <option value="Waste Management">Waste Management</option>
+                                    <option value="Noise">Noise</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editDescription" class="form-label">Description *</label>
+                            <textarea class="form-control" id="editDescription" name="description" rows="3" required></textarea>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Category *</label>
-                            <select name="category" class="form-select" id="editCategory" required>
-                                <option value="Infrastructure">Infrastructure</option>
-                                <option value="Roads">Roads</option>
-                                <option value="Water">Water</option>
-                                <option value="Electricity">Electricity</option>
-                                <option value="Waste Management">Waste Management</option>
-                                <option value="Noise">Noise</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Priority *</label>
+                            <label for="editPriority" class="form-label">Priority</label>
                             <select name="priority" class="form-select" id="editPriority" required>
                                 <option value="LOW">Low</option>
                                 <option value="MEDIUM">Medium</option>
@@ -348,5 +337,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/employee-dashboard.js"></script>
+<script>
+
+</script>
 </body>
 </html>

@@ -27,7 +27,6 @@ public class AdminServlet extends HttpServlet {
 
 
         try {
-            System.out.println("Complaints: " + dao.getAllComplaints().size()); //testing
 
             List<Complaint> allComplaints = dao.getAllComplaints();
             req.setAttribute("complaints", allComplaints);

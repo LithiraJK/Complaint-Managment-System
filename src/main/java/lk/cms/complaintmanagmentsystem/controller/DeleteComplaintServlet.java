@@ -16,6 +16,8 @@ public class DeleteComplaintServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         User user = (User) session.getAttribute("user");
 
+        System.out.println("delete-complaint servlet called");
+
         if (user == null) {
             resp.sendRedirect("signin.jsp");
             return;

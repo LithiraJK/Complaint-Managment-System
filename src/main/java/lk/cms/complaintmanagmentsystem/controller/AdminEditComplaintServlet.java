@@ -16,14 +16,18 @@ public class AdminEditComplaintServlet extends HttpServlet {
         HttpSession httpSession = req.getSession(false);
         User user = (User) httpSession.getAttribute("user");
 
+        System.out.println("admin-edit-complaint servlet called");
+
         if (user == null || !"ADMIN".equals(user.getRole())) {
-            resp.sendRedirect("login.jsp");
+            resp.sendRedirect("signin.jsp");
             return;
         }
 
         String complaintId = req.getParameter("complaintId");
         BasicDataSource ds = (BasicDataSource) req.getServletContext().getAttribute("ds");
         ComplaintDAO dao = new ComplaintDAO(ds);
+
+        System.out.println("Fetching complaint with ID: " + complaintId);
 
         try {
             Complaint complaint = dao.getComplaintById(complaintId);

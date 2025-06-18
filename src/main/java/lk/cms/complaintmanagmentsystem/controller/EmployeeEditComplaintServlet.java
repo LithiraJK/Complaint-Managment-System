@@ -23,6 +23,7 @@ public class EmployeeEditComplaintServlet extends HttpServlet {
             resp.sendRedirect("signin.jsp");
             return;
         }
+
         ServletContext context = req.getServletContext();
         BasicDataSource ds = (BasicDataSource) context.getAttribute("ds");
         ComplaintDAO dao = new ComplaintDAO(ds);
@@ -81,12 +82,17 @@ public class EmployeeEditComplaintServlet extends HttpServlet {
 
             boolean updated = dao.updateComplaintByEmployee(complaint);
 
-            req.setAttribute("msg", updated ? "Complaint updated successfully." : "Failed to update complaint.");
-            req.setAttribute("complaint", complaint);
-            req.getRequestDispatcher("pages/employee-dashboard.jsp").forward(req, resp);
+            if (updated) {
+                resp.sendRedirect("employee-dashboard");
+            } else {
+                req.setAttribute("error", "Failed to update complaint.");
+                resp.sendRedirect("employee-dashboard");
+            }
 
         } catch (Exception e) {
-            throw new ServletException(e);
+            e.printStackTrace();
+            req.setAttribute("error", "An error occurred while updating the complaint: " + e.getMessage());
+            resp.sendRedirect("employee-dashboard");
         }
     }
 }

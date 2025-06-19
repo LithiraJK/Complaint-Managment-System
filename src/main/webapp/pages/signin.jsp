@@ -65,7 +65,7 @@
 </head>
 <body>
     <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;overflow:hidden;">
-        <img src="../assets/images/login-wallpaper.png" alt="Login Wallpaper" style="width:100vw;height:100vh;object-fit:cover;filter:blur(2px);">
+        <img src="${pageContext.request.contextPath}/assets/images/login-wallpaper.png" alt="Login Wallpaper" style="width:100vw;height:100vh;object-fit:cover;filter:blur(2px);">
     </div>
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="glass-card">

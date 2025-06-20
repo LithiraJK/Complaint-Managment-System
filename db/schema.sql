@@ -14,7 +14,7 @@ CREATE TABLE users (
     is_active BOOLEAN DEFAULT TRUE
 );
 
--- Complaints table
+-- Complaint table
 CREATE TABLE complaints (
     complaint_id VARCHAR(255) PRIMARY KEY ,
     title VARCHAR(200) NOT NULL,
@@ -29,6 +29,3 @@ CREATE TABLE complaints (
     FOREIGN KEY (submitted_by) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Insert default admin user (password: admin123)
-INSERT INTO users (username, password, full_name, email, role) VALUES
-('admin', '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iKXIGAcPNi4jRdv2.JvqNMjO.K5W', 'System Administrator', 'admin@municipality.gov', 'ADMIN');

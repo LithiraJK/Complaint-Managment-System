@@ -102,5 +102,29 @@
         </form>
     </div>
 </div>
+    <script>
+        document.querySelector("form").addEventListener("submit", function(e) {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            const emailRegex = /^[\w\.-]+@[\w\.-]+\.\w{2,}$/;
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
+            let errorMsg = "";
+
+            if (!emailRegex.test(username)) {
+                errorMsg += "- Enter a valid email address.\n";
+            }
+
+            if (!passwordRegex.test(password)) {
+                errorMsg += "- Password must be at least 6 characters long and include at least one letter and one number.\n";
+            }
+
+            if (errorMsg) {
+                e.preventDefault();
+                alert("Please fix the following:\n\n" + errorMsg);
+            }
+        });
+    </script>
 </body>
 </html>

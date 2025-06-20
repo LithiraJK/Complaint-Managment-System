@@ -98,5 +98,42 @@
             </div>
         </div>
     </div>
+
+<script>
+        document.querySelector("form").addEventListener("submit", function(e) {
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const fullName = document.getElementById("full_name").value.trim();
+        const email = document.getElementById("email").value.trim();
+
+        const usernameRegex = /^[\w\.-]+@[\w\.-]+\.\w{2,}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+        const fullNameRegex = /^[A-Za-z\s]{3,}$/;
+        const emailRegex = /^[\w\.-]+@[\w\.-]+\.\w{2,}$/;
+
+        let message = "";
+
+        if (!usernameRegex.test(username)) {
+        message += "- Username must be email address.\n";
+    }
+
+        if (!passwordRegex.test(password)) {
+        message += "- Password must be at least 6 characters and contain at least one letter and one number.\n";
+    }
+
+        if (!fullNameRegex.test(fullName)) {
+        message += "- Full name must contain only letters and spaces.\n";
+    }
+
+        if (!emailRegex.test(email)) {
+        message += "- Invalid email address.\n";
+    }
+
+        if (message) {
+        e.preventDefault();
+        alert("Please correct the following:\n\n" + message);
+    }
+    });
+</script>
 </body>
 </html>
